@@ -11,7 +11,9 @@ import {
   Avatar, 
   CircularProgress,
   InputAdornment,
-  IconButton
+  IconButton,
+  Alert,
+  useTheme
 } from '@mui/material';
 import { LockOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
@@ -29,11 +31,10 @@ const validationSchema = yup.object({
 });
 
 const LandingPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login, authError, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const theme = useTheme();
 
   const formik = useFormik({
     initialValues: {
@@ -42,50 +43,98 @@ const LandingPage: React.FC = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true);
-      setError('');
       try {
         await login(values.email, values.password);
         navigate('/dashboard');
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Login failed');
-      } finally {
-        setIsLoading(false);
+      } catch (error) {
+        console.error('Login error:', error);
+        formik.setStatus({
+          isError: true,
+          message: 'Login failed. Please try again.',
+        });
       }
     },
   });
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container 
+      component="main" 
+      maxWidth="xs"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        justifyContent: 'center',
+        py: 4,
+        px: 2,
+      }}
+    >
       <Box
         sx={{
-          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          gap: 3,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ 
+          bgcolor: 'primary.main',
+          width: 64,
+          height: 64,
+          '& .MuiSvgIcon-root': {
+            fontSize: '2rem'
+          }
+        }}>
           <LockOutlined />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        
+        <Typography component="h1" variant="h4" sx={{ 
+          fontWeight: 600,
+          color: 'text.primary',
+          textAlign: 'center'
+        }}>
           Clinical Study Portal
         </Typography>
-        <Paper elevation={3} sx={{ mt: 3, p: 4, width: '100%' }}>
+        
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            p: { xs: 3, sm: 4 },
+            width: '100%',
+            borderRadius: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {authError && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {authError}
+            </Alert>
+          )}
+
           <form onSubmit={formik.handleSubmit}>
             <TextField
               fullWidth
               id="email"
               name="email"
-              label="Email"
+              label="Email Address"
               margin="normal"
               variant="outlined"
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              disabled={isLoading}
+              disabled={authLoading}
+              autoComplete="email"
+              autoFocus
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                }
+              }}
             />
+            
             <TextField
               fullWidth
               id="password"
@@ -98,7 +147,13 @@ const LandingPage: React.FC = () => {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              disabled={isLoading}
+              disabled={authLoading}
+              autoComplete="current-password"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                }
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -113,20 +168,25 @@ const LandingPage: React.FC = () => {
                 ),
               }}
             />
-            {error && (
-              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                {error}
-              </Typography>
-            )}
+            
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              disabled={!formik.isValid || isLoading}
-              sx={{ mt: 3, mb: 2 }}
+              disabled={!formik.isValid || authLoading}
+              sx={{ 
+                mt: 3, 
+                mb: 2, 
+                py: 1.5,
+                borderRadius: 2,
+                fontSize: '1rem',
+                fontWeight: 600,
+                textTransform: 'none',
+                letterSpacing: 0.5,
+              }}
             >
-              {isLoading ? (
+              {authLoading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
                 'Sign In'

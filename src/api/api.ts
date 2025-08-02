@@ -1,7 +1,14 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import { ApiResponse, BloodPressureData, User } from '../types';
+import { ApiResponse, BloodPressureData, User, BloodPressureReading } from '../types/models';
+import { AppError } from '../types/models';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+
+// Define the shape of error responses from your API
+interface ApiErrorResponse {
+  message?: string;
+  [key: string]: unknown;
+}
 
 class ApiService {
   private instance: AxiosInstance;
@@ -21,34 +28,39 @@ class ApiService {
   private setupInterceptors() {
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => response,
-      (error: AxiosError) => {
+      (error: AxiosError<ApiErrorResponse>) => {
         if (error.response) {
-          console.error('API Error:', error.response.status, error.response.data);
+          const errorMessage = error.response.data?.message || error.message;
+          throw new AppError(errorMessage, 'API_ERROR', error);
         } else {
-          console.error('API Error:', error.message);
+          throw new AppError(error.message, 'NETWORK_ERROR', error);
         }
-        return Promise.reject(error);
       }
     );
   }
 
   async login(email: string, password: string): Promise<ApiResponse<User>> {
     try {
-      // Simulate network delay for realistic UX
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Mock response - in real app this would be actual API call
-      if (email && password.length >= 6) {
-        return {
-          data: {
-            email,
-            token: `mock-token-${Math.random().toString(36).substring(2)}`,
-          },
-        };
+      // Validate email format (simple version - consider using a library for production)
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email) || password.length < 6) {
+        throw new AppError('Invalid credentials', 'AUTH_ERROR');
       }
-      throw new Error('Invalid credentials');
+      
+      return {
+        data: {
+          email: email as `${string}@${string}.${string}`, // Type assertion
+          token: `mock-token-${Math.random().toString(36).substring(2)}`,
+        },
+      };
     } catch (error) {
-      return { error: error instanceof Error ? error.message : 'Login failed' };
+      return { 
+        error: error instanceof AppError 
+          ? error.message 
+          : 'Login failed' 
+      };
     }
   }
 
@@ -56,16 +68,29 @@ class ApiService {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Generate mock data
-      const data: BloodPressureData = {
-        blood_pressures: Array.from({ length: 20 }, () => 
-          Math.floor(Math.random() * 60) + 80 // Random values between 80-140
-        ),
-      };
+      // Generate values between 60-180 to match slider range
+      const readings: BloodPressureReading[] = Array.from({ length: 20 }, (_, i) => ({
+        value: Math.floor(Math.random() * 120) + 60, // 60-180 range
+        timestamp: new Date(Date.now() - i * 3600000),
+      }));
       
-      return { data };
+      const values = readings.map(r => r.value);
+      const average = values.reduce((a, b) => a + b, 0) / values.length;
+      
+      return { 
+        data: {
+          readings,
+          average,
+          min: Math.min(...values),
+          max: Math.max(...values),
+        } 
+      };
     } catch (error) {
-      return { error: error instanceof Error ? error.message : 'Failed to fetch data' };
+      return { 
+        error: error instanceof AppError 
+          ? error.message 
+          : 'Failed to fetch data' 
+      };
     }
   }
 }
