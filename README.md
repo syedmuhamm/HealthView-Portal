@@ -1,8 +1,8 @@
 # Clinical Study Portal – Participant Dashboard
 
 ![Login View](/screenshots/login_view.png)
-![Dashboard View](/screenshots/dashboard_with_intervals.png)
-![Log Scale View](/screenshots/dashboard_with_log.png)
+![Dashboard View](/screenshots/dashboard_view.png)
+![Log Scale View](/screenshots/dashboard_view_tablet.png)
 
 A fully responsive, production-ready **React + TypeScript** application for clinical study participants to monitor and interact with their blood pressure data in real-time. Built with modern development standards, this portal emphasizes accessibility, usability, and scalability.
 
