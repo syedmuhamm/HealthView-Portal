@@ -1,0 +1,40 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.dashboard-header {
+  margin: map-get($spacings, 3) 0;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: map-get($spacings, 5);
+    gap: map-get($spacings, 2);
+
+    &--mobile {
+      flex-direction: column;
+    }
+  }
+
+  &__title {
+    color: map-get(map-get($colors, text), primary);
+    margin: 0;
+  }
+
+  &__logout-btn {
+    // Using MUI's error color for the button
+    border-color: map-get(map-get($colors, error), main);
+    color: map-get(map-get($colors, error), main);
+
+    &:hover {
+      background-color: rgba(map-get(map-get($colors, error), main), 0.04);
+      border-color: map-get(map-get($colors, error), dark);
+    }
+  }
+
+  @include mobile {
+    &__container {
+      margin-bottom: map-get($spacings, 3);
+    }
+  }
+}

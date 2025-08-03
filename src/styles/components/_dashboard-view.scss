@@ -1,0 +1,21 @@
+@use '../variables' as *;
+
+.dashboard-view {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacings, 3);
+
+  .error-alert {
+    margin-bottom: map-get($spacings, 2);
+  }
+
+  .dashboard-grid {
+    display: grid;
+    gap: map-get($spacings, 3);
+    grid-template-columns: 1fr;
+
+    @media (min-width: map-get($breakpoints, desktop)) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}

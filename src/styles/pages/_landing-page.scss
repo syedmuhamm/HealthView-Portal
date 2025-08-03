@@ -1,0 +1,73 @@
+@use 'sass:map';
+@use '../variables' as vars;
+
+.landing-page {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    padding: map.get(vars.$spacings, 4) map.get(vars.$spacings, 2);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: map.get(vars.$spacings, 3);
+  }
+
+  &__avatar {
+    background-color: map.get(map.get(vars.$colors, primary), main);
+    width: 64px;
+    height: 64px;
+
+    .MuiSvgIcon-root {
+      font-size: 2rem;
+    }
+  }
+
+  &__title {
+    font-weight: map.get(vars.$font-weights, bold);
+    color: map.get(map.get(vars.$colors, text), primary);
+    text-align: center;
+  }
+
+  &__paper {
+    padding: map.get(vars.$spacings, 3);
+    width: 100%;
+    border-radius: vars.$border-radius;
+    display: flex;
+    flex-direction: column;
+    gap: map.get(vars.$spacings, 2);
+
+    @media (min-width: map.get(vars.$breakpoints, sm)) {
+      padding: map.get(vars.$spacings, 4);
+    }
+  }
+
+  &__error {
+    margin-bottom: map.get(vars.$spacings, 2);
+  }
+
+  &__input {
+    .MuiOutlinedInput-root {
+      border-radius: 8px;
+    }
+  }
+
+  &__button {
+    margin-top: map.get(vars.$spacings, 3);
+    margin-bottom: map.get(vars.$spacings, 2);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: map.get(vars.$font-weights, bold);
+    text-transform: none;
+    letter-spacing: 0.5px;
+  }
+
+  &__password-toggle {
+    color: map.get(map.get(vars.$colors, text), secondary);
+  }
+}

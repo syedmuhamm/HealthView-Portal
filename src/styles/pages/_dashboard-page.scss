@@ -1,0 +1,23 @@
+@use '../variables' as *;
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.dashboard-container {
+  padding: map-get($spacings, 2) map-get($spacings, 1.5);
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacings, 3);
+
+  @media (min-width: map-get($breakpoints, sm)) {
+    padding: map-get($spacings, 3) map-get($spacings, 3);
+  }
+
+  @media (min-width: map-get($breakpoints, md)) {
+    padding: map-get($spacings, 4) map-get($spacings, 3);
+  }
+}

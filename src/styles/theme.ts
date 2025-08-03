@@ -1,5 +1,6 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
+// Note: We've removed redundant style definitions that are now in SCSS
 const baseTheme = createTheme({
   palette: {
     primary: {
@@ -46,39 +47,7 @@ const baseTheme = createTheme({
     divider: 'rgba(0, 0, 0, 0.12)',
   },
   typography: {
-    fontFamily: [
-      '"Roboto"',
-      '"Helvetica"',
-      '"Arial"',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    h1: {
-      fontSize: '2.5rem',
-      fontWeight: 500,
-    },
-    h2: {
-      fontSize: '2rem',
-      fontWeight: 500,
-    },
-    h3: {
-      fontSize: '1.75rem',
-      fontWeight: 500,
-    },
-    h4: {
-      fontSize: '1.5rem',
-      fontWeight: 500,
-    },
-    h5: {
-      fontSize: '1.25rem',
-      fontWeight: 500,
-    },
-    h6: {
-      fontSize: '1rem',
-      fontWeight: 500,
-    },
+    fontFamily: 'var(--font-family-primary)',
     button: {
       textTransform: 'none',
       fontWeight: 500,
@@ -91,14 +60,17 @@ const baseTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          // Border radius now controlled by SCSS
+          '&.Mui-disabled': {
+            pointerEvents: 'auto', // Fix for button tooltips when disabled
+          },
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          // Border radius now controlled by SCSS
         },
       },
     },
@@ -106,6 +78,13 @@ const baseTheme = createTheme({
       defaultProps: {
         variant: 'outlined',
         fullWidth: true,
+      },
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          // Now handled by SCSS
+        },
       },
     },
   },

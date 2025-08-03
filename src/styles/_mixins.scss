@@ -1,0 +1,58 @@
+@use 'variables' as *;
+
+// Media queries
+@mixin mobile {
+  @media (max-width: map-get($breakpoints, mobile)) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: map-get($breakpoints, tablet)) {
+    @content;
+  }
+}
+
+// Flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Typography
+@mixin heading($level) {
+  font-size: map-get($font-sizes, $level);
+  font-weight: map-get($font-weights, medium);
+  line-height: 1.2;
+  margin-bottom: map-get($spacings, 3);
+}
+
+// Buttons
+@mixin button-base {
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-family: $font-family;
+  font-weight: map-get($font-weights, medium);
+  text-transform: none;
+  transition: all 0.3s ease;
+}
+
+// Utility
+@mixin reduce-motion {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

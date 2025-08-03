@@ -1,0 +1,37 @@
+@use 'variables' as *;
+
+:root {
+  --mobile-breakpoint: #{map-get($breakpoints, mobile)};
+  --tablet-breakpoint: #{map-get($breakpoints, tablet)};
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+
+  @include mobile {
+    font-size: 14px;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: map-get(map-get($colors, background), default);
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  @include flex-column;
+}
+
+@include reduce-motion;

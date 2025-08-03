@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { DashboardView } from '../components/DashboardView';
 import { DashboardHeader } from '../components/DashboardHeader';
+import '../styles/pages/_dashboard-page.scss';
 
 const DashboardPage: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -25,28 +26,14 @@ const DashboardPage: React.FC = () => {
 
   if (!user) {
     return (
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
+      <Box className="loading-container">
         <CircularProgress size={60} thickness={4} />
       </Box>
     );
   }
 
   return (
-    <Container 
-      maxWidth="lg" 
-      sx={{ 
-        py: { xs: 2, md: 4 },
-        px: { xs: 1.5, sm: 3 },
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 3,
-      }}
-    >
+    <Container maxWidth="lg" className="dashboard-container">
       <DashboardHeader 
         title="Blood Pressure Monitoring" 
         onLogout={logout} 

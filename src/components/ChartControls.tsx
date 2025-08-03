@@ -13,6 +13,7 @@ import {
   Typography
 } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
+import '../styles/components/_chart-controls.scss';
 
 interface ChartControlsProps {
   range: [number, number];
@@ -37,16 +38,17 @@ export const ChartControls: React.FC<ChartControlsProps> = ({
   onPollIntervalChange,
   onRefresh,
 }) => (
-  <Paper elevation={3} sx={{ p: isMobile ? 2 : 3, mb: 3 }}>
-    <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} gap={3}>
-      <Box flex={1}>
-        <FormControl fullWidth margin="normal" size={isMobile ? 'small' : 'medium'}>
+  <Paper elevation={3} className={`chart-controls ${isMobile ? 'mobile' : ''}`}>
+    <Box className="controls-container">
+      <Box className="controls-section">
+        <FormControl fullWidth className="interval-select">
           <InputLabel id="poll-interval-label">Update Interval</InputLabel>
           <Select
             labelId="poll-interval-label"
             value={pollInterval}
             label="Update Interval"
             onChange={(e) => onPollIntervalChange(Number(e.target.value))}
+            size={isMobile ? 'small' : 'medium'}
           >
             <MenuItem value={2000}>2 seconds</MenuItem>
             <MenuItem value={5000}>5 seconds</MenuItem>
@@ -55,8 +57,8 @@ export const ChartControls: React.FC<ChartControlsProps> = ({
           </Select>
         </FormControl>
 
-        <Box mt={2}>
-          <Typography variant={isMobile ? 'body2' : 'body1'} gutterBottom>
+        <Box className="range-control">
+          <Typography variant={isMobile ? 'body2' : 'body1'} className="range-label">
             Value Range: {range[0]} - {range[1]}
           </Typography>
           <Slider
@@ -66,10 +68,7 @@ export const ChartControls: React.FC<ChartControlsProps> = ({
             min={60}
             max={180}
             step={5}
-            sx={{
-              width: isMobile ? '90%' : '100%',
-              mx: isMobile ? 'auto' : 0
-            }}
+            className="range-slider"
           />
         </Box>
 
@@ -82,21 +81,15 @@ export const ChartControls: React.FC<ChartControlsProps> = ({
             />
           }
           label="Logarithmic Scale"
-          sx={{ mt: 1 }}
+          className="scale-switch"
         />
       </Box>
 
-      <Box 
-        flex={1} 
-        display="flex" 
-        alignItems="center" 
-        justifyContent={isMobile ? 'flex-start' : 'center'}
-        mt={isMobile ? 2 : 0}
-      >
-        <IconButton onClick={onRefresh} disabled={loading}>
+      <Box className="refresh-section">
+        <IconButton onClick={onRefresh} disabled={loading} className="refresh-button">
           <Refresh fontSize={isMobile ? 'small' : 'medium'} />
         </IconButton>
-        <Typography variant={isMobile ? 'body2' : 'body1'} sx={{ ml: 1 }}>
+        <Typography variant={isMobile ? 'body2' : 'body1'} className="refresh-text">
           {loading ? 'Updating...' : `Last updated: ${new Date().toLocaleTimeString()}`}
         </Typography>
       </Box>

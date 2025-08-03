@@ -4,6 +4,7 @@ import { BloodPressureStats } from './BloodPressureStats';
 import { ChartControls } from './ChartControls';
 import { BloodPressureChart } from './BloodPressureChart';
 import { useBloodPressureData } from '../hooks/useBloodPressureData';
+import '../styles/components/_dashboard-view.scss';
 
 interface DashboardViewProps {
   isMobile: boolean;
@@ -41,9 +42,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ isMobile }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box className="dashboard-view">
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert severity="error" className="error-alert">
           {error}
         </Alert>
       )}
@@ -60,11 +61,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ isMobile }) => {
         isMobile={isMobile}
       />
 
-      <Box sx={{ 
-        display: 'grid',
-        gap: 3,
-        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }
-      }}>
+      <Box className="dashboard-grid">
         <BloodPressureStats 
           data={data} 
           filteredData={filteredData} 

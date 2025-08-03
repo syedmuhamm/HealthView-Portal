@@ -12,12 +12,12 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
-  Alert,
-  useTheme
+  Alert
 } from '@mui/material';
 import { LockOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import '../styles/pages/_landing-page.scss';
 
 const validationSchema = yup.object({
   email: yup
@@ -34,7 +34,6 @@ const LandingPage: React.FC = () => {
   const { login, authError, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const theme = useTheme();
 
   const formik = useFormik({
     initialValues: {
@@ -57,58 +56,19 @@ const LandingPage: React.FC = () => {
   });
 
   return (
-    <Container 
-      component="main" 
-      maxWidth="xs"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        justifyContent: 'center',
-        py: 4,
-        px: 2,
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 3,
-        }}
-      >
-        <Avatar sx={{ 
-          bgcolor: 'primary.main',
-          width: 64,
-          height: 64,
-          '& .MuiSvgIcon-root': {
-            fontSize: '2rem'
-          }
-        }}>
+    <Container component="main" maxWidth="xs" className="landing-page__container">
+      <Box className="landing-page__content">
+        <Avatar className="landing-page__avatar">
           <LockOutlined />
         </Avatar>
         
-        <Typography component="h1" variant="h4" sx={{ 
-          fontWeight: 600,
-          color: 'text.primary',
-          textAlign: 'center'
-        }}>
+        <Typography component="h1" variant="h4" className="landing-page__title">
           Clinical Study Portal
         </Typography>
         
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: { xs: 3, sm: 4 },
-            width: '100%',
-            borderRadius: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-          }}
-        >
+        <Paper elevation={3} className="landing-page__paper">
           {authError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" className="landing-page__error">
               {authError}
             </Alert>
           )}
@@ -128,11 +88,7 @@ const LandingPage: React.FC = () => {
               disabled={authLoading}
               autoComplete="email"
               autoFocus
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                }
-              }}
+              className="landing-page__input"
             />
             
             <TextField
@@ -149,11 +105,7 @@ const LandingPage: React.FC = () => {
               helperText={formik.touched.password && formik.errors.password}
               disabled={authLoading}
               autoComplete="current-password"
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                }
-              }}
+              className="landing-page__input"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -161,6 +113,7 @@ const LandingPage: React.FC = () => {
                       aria-label="toggle password visibility"
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
+                      className="landing-page__password-toggle"
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -175,16 +128,7 @@ const LandingPage: React.FC = () => {
               variant="contained"
               color="primary"
               disabled={!formik.isValid || authLoading}
-              sx={{ 
-                mt: 3, 
-                mb: 2, 
-                py: 1.5,
-                borderRadius: 2,
-                fontSize: '1rem',
-                fontWeight: 600,
-                textTransform: 'none',
-                letterSpacing: 0.5,
-              }}
+              className="landing-page__button"
             >
               {authLoading ? (
                 <CircularProgress size={24} color="inherit" />

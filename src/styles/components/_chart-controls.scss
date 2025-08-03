@@ -1,0 +1,81 @@
+@use '../variables' as *;
+
+.chart-controls {
+  padding: map-get($spacings, 3);
+  margin-bottom: map-get($spacings, 3);
+  border-radius: $border-radius;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 
+                0 5px 8px 0 rgba(0,0,0,0.14), 
+                0 1px 14px 0 rgba(0,0,0,0.12);
+  }
+
+  &.mobile {
+    padding: map-get($spacings, 2);
+  }
+
+  .controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacings, 3);
+
+    @media (min-width: map-get($breakpoints, tablet)) {
+      flex-direction: row;
+    }
+  }
+
+  .controls-section {
+    flex: 1;
+
+    .interval-select {
+      margin: map-get($spacings, 2) 0;
+    }
+
+    .range-control {
+      margin-top: map-get($spacings, 2);
+
+      .range-label {
+        margin-bottom: map-get($spacings, 1);
+      }
+
+      .range-slider {
+        width: 100%;
+        margin: 0 auto;
+
+        @media (max-width: map-get($breakpoints, mobile)) {
+          width: 90%;
+        }
+      }
+    }
+
+    .scale-switch {
+      margin-top: map-get($spacings, 1);
+    }
+  }
+
+  .refresh-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-top: map-get($spacings, 2);
+
+    @media (min-width: map-get($breakpoints, tablet)) {
+      justify-content: center;
+      margin-top: 0;
+    }
+
+    .refresh-button {
+      color: map-get(map-get($colors, primary), main);
+
+      &:disabled {
+        color: map-get(map-get($colors, text), disabled);
+      }
+    }
+
+    .refresh-text {
+      margin-left: map-get($spacings, 1);
+    }
+  }
+}

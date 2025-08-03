@@ -32,6 +32,20 @@ HealthView-Portal/
 │   │   ├── DashboardPage.tsx  # Dashboard page container
 │   │   └── LandingPage.tsx    # Login/landing page
 │   ├── styles/                # Styling
+│   │   ├── components/            # Component-specific styles
+│   │   │   ├── _blood-pressure-chart.scss
+│   │   │   ├── _blood-pressure-stats.scss
+│   │   │   ├── _chart-controls.scss
+│   │   │   ├── _dashboard-header.scss
+│   │   │   └── _dashboard-view.scss
+│   │   ├── pages/
+│   │   │   ├── _dashboard-page.scss
+│   │   │   └── _landing-page.scss
+│   │   ├── _variables.scss        # Design tokens and variables
+│   │   ├── _mixins.scss           # Reusable mixins
+│   │   ├── _typography.scss       # Font styles
+│   │   ├── _layout.scss           # Global layout rules
+│   │   └── main.scss              # Main SCSS entry point
 │   │   ├── globalStyles.ts    # Global CSS styles
 │   │   └── theme.ts           # Material UI theme configuration
 │   ├── theme.d.ts             # Type declarations for styled-components

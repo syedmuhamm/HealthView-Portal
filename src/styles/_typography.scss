@@ -1,0 +1,49 @@
+@use 'variables' as *;
+
+body {
+  font-family: $font-family;
+  color: map-get(map-get($colors, text), primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  @include heading('h1');
+}
+
+h2 {
+  @include heading('h2');
+}
+
+h3 {
+  @include heading('h3');
+}
+
+h4 {
+  @include heading('h4');
+}
+
+h5 {
+  @include heading('h5');
+}
+
+h6 {
+  @include heading('h6');
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  @include button-base;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}

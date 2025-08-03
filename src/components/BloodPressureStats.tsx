@@ -1,6 +1,23 @@
 import React from 'react';
-import { Box, Typography, Paper, useTheme } from '@mui/material';
+import { 
+  Box, 
+  Typography, 
+  Paper, 
+  LinearProgress,
+} from '@mui/material';
+import { 
+  ArrowUpward, 
+  ArrowDownward, 
+  ArrowForward,
+  Favorite,
+  FavoriteBorder,
+  Timeline,
+  ShowChart,
+  AccessTime,
+  Whatshot
+} from '@mui/icons-material';
 import { BloodPressureData } from '../types/models';
+import '../styles/components/_blood-pressure-stats.scss';
 
 interface BloodPressureStatsProps {
   data?: BloodPressureData | null;
@@ -13,104 +30,178 @@ export const BloodPressureStats: React.FC<BloodPressureStatsProps> = ({
   filteredData = [], 
   isMobile 
 }) => {
-  const theme = useTheme();
-  
   if (!data || !filteredData.length) return null;
 
-  // Calculate stats based on FILTERED data
+  // Calculate stats
   const latestReading = filteredData[0]?.rawValue;
   const currentAverage = filteredData.reduce((sum, { rawValue }) => sum + rawValue, 0) / filteredData.length;
   const minValue = Math.min(...filteredData.map(d => d.rawValue));
   const maxValue = Math.max(...filteredData.map(d => d.rawValue));
-
-  // Calculate trend using last two filtered readings
+  const totalReadings = filteredData.length;
   const trend = filteredData.length > 1 
-    ? filteredData[0].rawValue - filteredData[1].rawValue 
+    ? (filteredData[0].rawValue - filteredData[Math.min(2, filteredData.length-1)].rawValue) / 
+      Math.min(2, filteredData.length-1)
     : 0;
-  const trendDirection = trend > 0 ? '↑' : trend < 0 ? '↓' : '→';
-
-  // Determine status based on latest reading
-  const getStatus = (value: number) => {
-    if (value < 90) return 'Low';
-    if (value < 120) return 'Normal';
-    if (value < 140) return 'Elevated';
-    return 'High';
-  };
-
+  const trendDirection = trend > 1 ? 'up' : trend < -1 ? 'down' : 'stable';
   const status = getStatus(latestReading);
-  const statusColor = {
-    Low: theme.palette.info.main,
-    Normal: theme.palette.success.main,
-    Elevated: theme.palette.warning.main,
-    High: theme.palette.error.main
-  }[status];
+  const healthScore = Math.max(0, 100 - Math.abs(120 - latestReading) * 1.5);
 
   return (
-    <Paper elevation={3} sx={{ p: isMobile ? 2 : 3, mb: 3 }}>
-      <Box display="flex" justifyContent="space-around" flexWrap="wrap" gap={2}>
-        <StatItem 
-          label="Current" 
-          value={latestReading} 
-          unit="mmHg"
-          color={theme.palette.primary.main} 
-          isMobile={isMobile}
-        />
-        <StatItem 
-          label="Status" 
-          value={status} 
-          unit=""
-          color={statusColor} 
-          isMobile={isMobile}
-        />
-        <StatItem 
-          label="Range" 
-          value={`${minValue}-${maxValue}`} 
-          unit="mmHg"
-          color={theme.palette.secondary.main} 
-          isMobile={isMobile}
-        />
-        <StatItem 
-          label="Trend" 
-          value={trendDirection} 
-          unit={`${Math.abs(trend)} mmHg`}
-          color={trend > 0 ? theme.palette.error.main : theme.palette.success.main}
-          isMobile={isMobile}
-        />
+    <Paper elevation={3} className={`blood-pressure-stats ${isMobile ? 'mobile' : ''}`}>
+      <Box className="stats-header">
+        <Box className="status-indicator" />
+        <Box>
+          <Typography variant="h6" className="stats-title">
+            Blood Pressure Overview
+          </Typography>
+          <Typography variant="body2" className="readings-count">
+            {totalReadings} readings analyzed
+          </Typography>
+        </Box>
+      </Box>
+
+      <Box className="stats-grid">
+        <Box className="stats-column">
+          <Box className="current-reading-header">
+            <Typography variant="subtitle1" className="section-title">
+              Current Reading
+            </Typography>
+            <Box className="timestamp">
+              <AccessTime fontSize="small" className="time-icon" />
+              <Typography variant="caption">
+                Just now
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box className="reading-display">
+            <Box className="reading-value">
+              <Typography variant="h2" className={`value ${status.severity}`}>
+                {latestReading}
+              </Typography>
+              <Typography variant="body2" className="unit">
+                mmHg
+              </Typography>
+            </Box>
+
+            <Box className="status-info">
+              <Box className="status-indicator-row">
+                <Box className={`status-dot ${status.severity}`} />
+                <Typography variant="body1" className="status-text">
+                  {status.text}
+                </Typography>
+              </Box>
+              <Typography variant="body2" className="status-description">
+                {status.severity === 'normal' ? 
+                  'Within healthy range' : 
+                  'Consider consulting your doctor'}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box className="health-score">
+            <Box className="score-header">
+              <Typography variant="caption" className="score-label">
+                Health score
+              </Typography>
+              <Typography variant="caption" className="score-value">
+                {Math.round(healthScore)}/100
+              </Typography>
+            </Box>
+            <LinearProgress 
+              variant="determinate" 
+              value={healthScore} 
+              className={`score-bar ${healthScore > 70 ? 'good' : healthScore > 40 ? 'fair' : 'poor'}`}
+            />
+          </Box>
+        </Box>
+
+        <Box className="trends-column">
+          <Typography variant="subtitle1" className="section-title">
+            Trends & History
+          </Typography>
+
+          <Box className="stats-cards">
+            <StatCard 
+              icon={<Timeline className="primary-icon" />}
+              label="Average"
+              value={Math.round(currentAverage)}
+              unit="mmHg"
+              variant="primary"
+            />
+            <StatCard 
+              icon={trendDirection === 'up' ? 
+                <ArrowUpward className="error-icon" /> : 
+                trendDirection === 'down' ? 
+                <ArrowDownward className="success-icon" /> : 
+                <ArrowForward className="info-icon" />}
+              label="Trend"
+              value={trendDirection}
+              unit={`${Math.abs(Math.round(trend))} mmHg`}
+              variant={trendDirection === 'up' ? 'error' : trendDirection === 'down' ? 'success' : 'info'}
+            />
+            <StatCard 
+              icon={<ShowChart className="secondary-icon" />}
+              label="Range"
+              value={`${minValue}-${maxValue}`}
+              unit="mmHg"
+              variant="secondary"
+            />
+            <StatCard 
+              icon={healthScore > 70 ? 
+                <Favorite className="error-icon" /> : 
+                <FavoriteBorder className="disabled-icon" />}
+              label="Health"
+              value={healthScore > 70 ? 'Good' : healthScore > 40 ? 'Fair' : 'Poor'}
+              unit=""
+              variant={healthScore > 70 ? 'success' : healthScore > 40 ? 'warning' : 'error'}
+            />
+          </Box>
+
+          <Box className="trend-message">
+            <Typography variant="caption" className="message-text">
+              <Whatshot className="trend-icon" />
+              {trendDirection === 'up' ? 
+                'Your blood pressure is trending upwards' : 
+               trendDirection === 'down' ? 
+                'Your blood pressure is improving' : 
+                'Your blood pressure is stable'}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     </Paper>
   );
 };
 
-const StatItem: React.FC<{ 
-  label: string; 
+const StatCard: React.FC<{
+  icon: React.ReactNode;
+  label: string;
   value: string | number;
   unit: string;
-  color: string;
-  isMobile: boolean;
-}> = ({ label, value, unit, color, isMobile }) => (
-  <Box textAlign="center" minWidth={isMobile ? '40%' : 'auto'}>
-    <Typography 
-      variant={isMobile ? 'caption' : 'body2'} 
-      color="text.secondary"
-      sx={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}
-    >
+  variant: string;
+}> = ({ icon, label, value, unit, variant }) => (
+  <Paper elevation={0} className={`stat-card ${variant}`}>
+    <Box className="card-icon">
+      {icon}
+    </Box>
+    <Typography variant="caption" className="card-label">
       {label}
     </Typography>
-    <Typography 
-      variant={isMobile ? 'h6' : 'h5'} 
-      fontWeight="bold"
-      color={color}
-      sx={{ my: 0.5 }}
-    >
+    <Typography variant="h6" className="card-value">
       {value}
     </Typography>
     {unit && (
-      <Typography 
-        variant={isMobile ? 'caption' : 'body2'} 
-        color="text.secondary"
-      >
+      <Typography variant="caption" className="card-unit">
         {unit}
       </Typography>
     )}
-  </Box>
+  </Paper>
 );
+
+function getStatus(value: number) {
+  if (value < 90) return { text: 'Low', severity: 'low' };
+  if (value < 120) return { text: 'Normal', severity: 'normal' };
+  if (value < 140) return { text: 'Elevated', severity: 'elevated' };
+  return { text: 'High', severity: 'high' };
+}

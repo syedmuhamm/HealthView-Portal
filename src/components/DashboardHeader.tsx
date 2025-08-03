@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 
 interface DashboardHeaderProps {
@@ -13,16 +13,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onLogout, 
   isMobile 
 }) => (
-  <Box sx={{ my: 2 }}>
-    <Box 
-      display="flex" 
-      justifyContent="space-between" 
-      alignItems="center" 
-      mb={4}
-      flexDirection={isMobile ? 'column' : 'row'}
-      gap={2}
-    >
-      <Typography variant={isMobile ? 'h5' : 'h4'} component="h1">
+  <div className="dashboard-header">
+    <div className={`dashboard-header__container ${isMobile ? 'dashboard-header__container--mobile' : ''}`}>
+      <Typography 
+        variant={isMobile ? 'h5' : 'h4'} 
+        component="h1"
+        className="dashboard-header__title"
+      >
         {title}
       </Typography>
       <Button 
@@ -31,9 +28,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         startIcon={<Logout />}
         onClick={onLogout}
         size={isMobile ? 'small' : 'medium'}
+        className="dashboard-header__logout-btn"
       >
         {isMobile ? 'Logout' : 'Sign Out'}
       </Button>
-    </Box>
-  </Box>
+    </div>
+  </div>
 );

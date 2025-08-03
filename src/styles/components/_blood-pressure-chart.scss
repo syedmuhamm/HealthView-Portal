@@ -1,0 +1,47 @@
+@use '../variables' as *;
+
+.blood-pressure-chart {
+  padding: map-get($spacings, 2);
+  height: 350px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: $border-radius;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 3px 5px -1px rgba(74, 147, 135, 0.2), 0 5px 8px 0 rgba(0,0,0,0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  &.mobile {
+    padding: map-get($spacings, 1);
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  &__title {
+    margin-bottom: map-get($spacings, 1);
+    padding: 0 map-get($spacings, 1);
+    text-align: center;
+    color: map-get(map-get($colors, text), secondary);
+    font-weight: map-get($font-weights, bold);
+  }
+
+  &__container {
+    flex-grow: 1;
+  }
+
+  @media (min-width: map-get($breakpoints, tablet)) {
+    padding: map-get($spacings, 3);
+    height: 450px;
+  }
+
+  @media (min-width: map-get($breakpoints, desktop)) {
+    height: 500px;
+  }
+}
