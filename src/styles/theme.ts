@@ -1,6 +1,5 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
-// Note: We've removed redundant style definitions that are now in SCSS
 const baseTheme = createTheme({
   palette: {
     primary: {
@@ -62,15 +61,8 @@ const baseTheme = createTheme({
         root: {
           // Border radius now controlled by SCSS
           '&.Mui-disabled': {
-            pointerEvents: 'auto', // Fix for button tooltips when disabled
+            pointerEvents: 'auto',
           },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          // Border radius now controlled by SCSS
         },
       },
     },
@@ -78,13 +70,6 @@ const baseTheme = createTheme({
       defaultProps: {
         variant: 'outlined',
         fullWidth: true,
-      },
-    },
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          // Now handled by SCSS
-        },
       },
     },
   },
