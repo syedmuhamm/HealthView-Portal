@@ -1,33 +1,35 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { User, AppError } from '../types/models';
+import { User, AuthenticatedUser, AppError } from '../types/models';
 import { apiService } from '../api/api';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type Nullable<T> = T | null;
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthenticatedUser | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   authError: Nullable<string>;
   loading: boolean;
+  initialized: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState<Nullable<string>>(null);
-  const [storedUser, setStoredUser, removeStoredUser] = useLocalStorage<User | null>('user', null);
+  const [storedUser, setStoredUser, removeStoredUser] = useLocalStorage<AuthenticatedUser | null>('healthViewUser', null);
 
-  // Initialize from storage
   useEffect(() => {
-    if (storedUser && !user) {
+    if (storedUser) {
       setUser(storedUser);
     }
-  }, [storedUser, user]);
+    setInitialized(true);
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     try {
@@ -40,7 +42,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         throw new AppError(error || 'Authentication failed', 'AUTH_ERROR');
       }
       
-      const userData = { ...data, lastLogin: new Date() };
+      const userData: AuthenticatedUser = { 
+        ...data, 
+        lastLogin: new Date().toISOString()
+      };
+      
       setUser(userData);
       setStoredUser(userData);
     } catch (error) {
@@ -64,6 +70,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     isAuthenticated: !!user,
     authError,
     loading,
+    initialized
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

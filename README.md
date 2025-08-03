@@ -10,6 +10,16 @@ A fully responsive, production-ready **React + TypeScript** application for clin
 
 ## Highlights
 
+## Live Demo
+
+The application is deployed and available for testing:
+
+🔗 **Live URL:** [https://health-view-portal.vercel.app/](https://health-view-portal.vercel.app/)
+
+**Test Credentials:**
+- Email: Any valid email format (e.g., `user@example.com`)
+- Password: Any six or more characters
+
 ### Authentication
 - Secure mock login flow using JWT
 - Form validation via **Formik** and **Yup**
@@ -76,6 +86,7 @@ HealthView-Portal/
 │   │   ├── BloodPressureStats.tsx     # Statistics display panel
 │   │   ├── ChartControls.tsx          # Chart configuration controls
 │   │   ├── DashboardHeader.tsx        # Dashboard header with logout
+│   │   ├── ProtectedRoute.tsx        # Dashboard header with logout
 │   │   └── DashboardView.tsx          # Main dashboard content view
 │   ├── context/
 │   │   └── AuthContext.tsx    # Authentication state management
@@ -88,6 +99,20 @@ HealthView-Portal/
 │   │   ├── DashboardPage.tsx  # Dashboard page container
 │   │   └── LandingPage.tsx    # Login/landing page
 │   ├── styles/                # Styling
+│   │   ├── components/            # Component-specific styles
+│   │   │   ├── _blood-pressure-chart.scss
+│   │   │   ├── _blood-pressure-stats.scss
+│   │   │   ├── _chart-controls.scss
+│   │   │   ├── _dashboard-header.scss
+│   │   │   └── _dashboard-view.scss
+│   │   ├── pages/
+│   │   │   ├── _dashboard-page.scss
+│   │   │   └── _landing-page.scss
+│   │   ├── _variables.scss        # Design tokens and variables
+│   │   ├── _mixins.scss           # Reusable mixins
+│   │   ├── _typography.scss       # Font styles
+│   │   ├── _layout.scss           # Global layout rules
+│   │   └── main.scss              # Main SCSS entry point
 │   │   ├── globalStyles.ts    # Global CSS styles
 │   │   └── theme.ts           # Material UI theme configuration
 │   ├── theme.d.ts             # Type declarations for styled-components

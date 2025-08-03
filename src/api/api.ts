@@ -4,7 +4,6 @@ import { AppError } from '../types/models';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
-// Define the shape of error responses from your API
 interface ApiErrorResponse {
   message?: string;
   [key: string]: unknown;
@@ -43,7 +42,6 @@ class ApiService {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Validate email format (simple version - consider using a library for production)
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email) || password.length < 6) {
         throw new AppError('Invalid credentials', 'AUTH_ERROR');
@@ -51,8 +49,9 @@ class ApiService {
       
       return {
         data: {
-          email: email as `${string}@${string}.${string}`, // Type assertion
+          email: email as `${string}@${string}.${string}`,
           token: `mock-token-${Math.random().toString(36).substring(2)}`,
+          // lastLogin will be added in AuthContext after successful login
         },
       };
     } catch (error) {
@@ -68,9 +67,8 @@ class ApiService {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Generate values between 60-180 to match slider range
       const readings: BloodPressureReading[] = Array.from({ length: 20 }, (_, i) => ({
-        value: Math.floor(Math.random() * 120) + 60, // 60-180 range
+        value: Math.floor(Math.random() * 120) + 60,
         timestamp: new Date(Date.now() - i * 3600000),
       }));
       

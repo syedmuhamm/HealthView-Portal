@@ -1,9 +1,13 @@
 export type Email = `${string}@${string}.${string}`;
 
 export interface User {
-  email: Email;
+  email: `${string}@${string}.${string}`;
   token: string;
-  lastLogin?: Date;
+  lastLogin?: string;
+}
+
+export interface AuthenticatedUser extends User {
+  lastLogin: string;
 }
 
 export interface BloodPressureReading {

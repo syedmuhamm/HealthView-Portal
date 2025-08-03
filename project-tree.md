@@ -20,6 +20,7 @@ HealthView-Portal/
 │   │   ├── BloodPressureStats.tsx     # Statistics display panel
 │   │   ├── ChartControls.tsx          # Chart configuration controls
 │   │   ├── DashboardHeader.tsx        # Dashboard header with logout
+│   │   ├── ProtectedRoute.tsx        # Dashboard header with logout
 │   │   └── DashboardView.tsx          # Main dashboard content view
 │   ├── context/
 │   │   └── AuthContext.tsx    # Authentication state management

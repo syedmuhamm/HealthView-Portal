@@ -6,10 +6,13 @@ export function useLocalStorage<T>(
 ): [T, (value: T) => void, () => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
+      if (typeof window === 'undefined') {
+        return initialValue;
+      }
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.error('Error reading localStorage key:', error);
+      console.error('Error reading localStorage:', error);
       return initialValue;
     }
   });
@@ -17,35 +20,24 @@ export function useLocalStorage<T>(
   const setValue = (value: T) => {
     try {
       setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      }
     } catch (error) {
-      console.error('Error setting localStorage key:', error);
+      console.error('Error setting localStorage:', error);
     }
   };
 
   const removeValue = () => {
     try {
-      window.localStorage.removeItem(key);
       setStoredValue(initialValue);
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(key);
+      }
     } catch (error) {
-      console.error('Error removing localStorage key:', error);
+      console.error('Error removing localStorage:', error);
     }
   };
-
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === key) {
-        try {
-          setStoredValue(e.newValue ? JSON.parse(e.newValue) : initialValue);
-        } catch (error) {
-          console.error('Error parsing localStorage value:', error);
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, [key, initialValue]);
 
   return [storedValue, setValue, removeValue];
 }
