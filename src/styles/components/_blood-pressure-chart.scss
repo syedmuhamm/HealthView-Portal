@@ -36,6 +36,12 @@
     flex-grow: 1;
   }
 
+  &__graph {
+    .recharts-bar-rectangle {
+        fill: map-get(map-get($colors, primary), main);
+    }
+    }
+
   @media (min-width: map-get($breakpoints, tablet)) {
     padding: map-get($spacings, 3);
     height: 450px;

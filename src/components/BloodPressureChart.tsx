@@ -36,7 +36,7 @@ export const BloodPressureChart: React.FC<BloodPressureChartProps> = ({
         </Typography>
         <Box className="blood-pressure-chart__container">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
+            <BarChart className="blood-pressure-chart__graph" data={data}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.7} />
               <XAxis 
                 dataKey="name" 
