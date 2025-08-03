@@ -137,10 +137,10 @@ HealthView-Portal/
 
 ## Notes for Reviewers
 
-- 🔄 All API interactions are **mocked** and simulate network latency  
-- 🧪 Data is **randomly generated** per request for demonstration  
-- 🧼 Focused on **React + TypeScript best practices**, not backend auth  
-- 🧱 Strong architecture foundation for scaling real clinical systems  
+- All API interactions are **mocked** and simulate network latency  
+- Data is **randomly generated** per request for demonstration  
+- Focused on **React + TypeScript best practices**, not backend auth  
+- Strong architecture foundation for scaling real clinical systems  
 
 ---
 
